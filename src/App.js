@@ -22,10 +22,20 @@ const App = () => {
 
   //lifting state up
 
-  const [searchTerm, setSearchTerm] = React.useState("");
+  const [searchTerm, setSearchTerm] = React.useState(localStorage.getItem('search')||'React');
+  
+  React.useEffect(()=>{
+
+  // /==>arg 1: the function where the side-effect occurs,
+  // ==>arg 2 : optional second argument is a dependency array of varibales.if one these variables changes,the function for the side-effect is called.
+
+    localStorage.setItem('search',searchTerm);
+  },[searchTerm])
+
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
+
 
   //filter the stories staying only term which is met
   const searchedStories = stories.filter((story) =>
@@ -57,6 +67,24 @@ const Search = ({ search, onSearch }) => {
   );
 };
 
+
+const List = ({ list }) => {
+  return list.map((item) => <Item key={item.objectID} item={item} />);
+};
+
+const Item = ({ item }) => {
+  return (
+    <div>
+      <span>
+        <a href={item.url}>{item.title}</a>
+      </span>
+      <span>{item.author}</span>
+      <span>{item.num_comments}</span>
+      <span>{item.points}</span>
+    </div>
+  );
+};
+
 /*
 Variation 1: Nested Destructuring
 
@@ -76,10 +104,10 @@ const Item = ({ item: { title, url, author, num_comments, points } }) => {
     </div>
   );
 };
-*/
-//Variaton 2: Spread Operator
+
+//Variaton 2: Spread Operator & Rest Operator (final)
 const List = ({ list }) => {
-  return list.map((item) => <Item key={item.objectID} {...item} />);
+  return list.map(({objectID, ...item}) => <Item key={objectID} {...item} />);
 };
 
 const Item = ({ title, url, author, num_comments, points  }) => {
@@ -94,6 +122,7 @@ const Item = ({ title, url, author, num_comments, points  }) => {
     </div>
   );
 };
+*/
 export default App;
 
 /**git add remote 
