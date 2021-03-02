@@ -28,7 +28,9 @@ const App = () => {
   };
 
   //filter the stories staying only term which is met
-  const searchedStories = stories.filter(story => story.title.toLowerCase().includes(searchTerm.toLowerCase()));
+  const searchedStories = stories.filter((story) =>
+    story.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div>
@@ -40,35 +42,58 @@ const App = () => {
   );
 };
 
-const Search = (props) => {
+//search component
+const Search = ({ search, onSearch }) => {
   return (
     <div>
       <label htmlFor="search">Search: </label>
 
       {/* //controlled component */}
-      <input id="search" type="text" value={props.search} onChange={props.onSearch} />
+      <input id="search" type="text" value={search} onChange={onSearch} />
       <p>
-        Searching for <strong>{props.search}</strong>.
+        Searching for <strong>{search}</strong>.
       </p>
     </div>
   );
 };
 
-const List = (props) => {
-  return props.list.map((item) => {
-    return (
-      <div key={item.objectID}>
-        <span>
-          <a href={item.url}>{item.title}</a>
-        </span>
-        <span>{item.author}</span>
-        <span>{item.num_comments}</span>
-        <span>{item.points}</span>
-      </div>
-    );
-  });
+/*
+Variation 1: Nested Destructuring
+
+const List = ({ list }) => {
+  return list.map((item) => <Item key={item.objectID} item={item} />);
 };
 
+const Item = ({ item: { title, url, author, num_comments, points } }) => {
+  return (
+    <div>
+      <span>
+        <a href={url}>{title}</a>
+      </span>
+      <span>{author}</span>
+      <span>{num_comments}</span>
+      <span>{points}</span>
+    </div>
+  );
+};
+*/
+//Variaton 2: Spread Operator
+const List = ({ list }) => {
+  return list.map((item) => <Item key={item.objectID} {...item} />);
+};
+
+const Item = ({ title, url, author, num_comments, points  }) => {
+  return (
+    <div>
+      <span>
+        <a href={url}>{title}</a>
+      </span>
+      <span>{author}</span>
+      <span>{num_comments}</span>
+      <span>{points}</span>
+    </div>
+  );
+};
 export default App;
 
 /**git add remote 
@@ -78,3 +103,6 @@ export default App;
   498  git push -u origin master
   499  git status
 */
+
+
+
