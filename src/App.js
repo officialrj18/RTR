@@ -1,5 +1,19 @@
 import React from "react";
 
+//CUSTOM HOOK
+const useSemiPersistentState = (key,intialState) => {
+  const [value, setValue] = React.useState(
+    localStorage.getItem(key) || intialState
+  );
+//key helps the hook to use more than one..whithout overiding the "value" allocated item in 
+// the local storage. 
+  React.useEffect(() => {
+    localStorage.setItem(key, value);
+  }, [value,key]);
+
+  return [value, setValue];
+};
+
 const App = () => {
   const stories = [
     {
@@ -20,22 +34,21 @@ const App = () => {
     },
   ];
 
-  //lifting state up
 
-  const [searchTerm, setSearchTerm] = React.useState(localStorage.getItem('search')||'React');
+  // const [searchTerm, setSearchTerm] = React.useState(localStorage.getItem('search')||'React');
   
-  React.useEffect(()=>{
-
-  // /==>arg 1: the function where the side-effect occurs,
-  // ==>arg 2 : optional second argument is a dependency array of varibales.if one these variables changes,the function for the side-effect is called.
-
-    localStorage.setItem('search',searchTerm);
-  },[searchTerm])
+  
+  const [searchTerm, setSearchTerm] = useSemiPersistentState('search','react');
+  
+  // React.useEffect(() => {
+  //   localStorage.setItem("search", searchTerm);
+  // }, [searchTerm]);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
 
+ 
 
   //filter the stories staying only term which is met
   const searchedStories = stories.filter((story) =>
@@ -66,7 +79,6 @@ const Search = ({ search, onSearch }) => {
     </div>
   );
 };
-
 
 const List = ({ list }) => {
   return list.map((item) => <Item key={item.objectID} item={item} />);
@@ -105,6 +117,7 @@ const Item = ({ item: { title, url, author, num_comments, points } }) => {
   );
 };
 
+
 //Variaton 2: Spread Operator & Rest Operator (final)
 const List = ({ list }) => {
   return list.map(({objectID, ...item}) => <Item key={objectID} {...item} />);
@@ -123,6 +136,7 @@ const Item = ({ title, url, author, num_comments, points  }) => {
   );
 };
 */
+
 export default App;
 
 /**git add remote 
@@ -132,6 +146,4 @@ export default App;
   498  git push -u origin master
   499  git status
 */
-
-
-
+ // 67
