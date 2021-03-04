@@ -1,15 +1,15 @@
 import React from "react";
 
 //CUSTOM HOOK
-const useSemiPersistentState = (key,intialState) => {
+const useSemiPersistentState = (key, intialState) => {
   const [value, setValue] = React.useState(
     localStorage.getItem(key) || intialState
   );
-//key helps the hook to use more than one..whithout overiding the "value" allocated item in 
-// the local storage. 
+  //key helps the hook to use more than one..whithout overiding the "value" allocated item in
+  // the local storage.
   React.useEffect(() => {
     localStorage.setItem(key, value);
-  }, [value,key]);
+  }, [value, key]);
 
   return [value, setValue];
 };
@@ -34,12 +34,10 @@ const App = () => {
     },
   ];
 
-
   // const [searchTerm, setSearchTerm] = React.useState(localStorage.getItem('search')||'React');
-  
-  
-  const [searchTerm, setSearchTerm] = useSemiPersistentState('search','react');
-  
+
+  const [searchTerm, setSearchTerm] = useSemiPersistentState("search", "react");
+
   // React.useEffect(() => {
   //   localStorage.setItem("search", searchTerm);
   // }, [searchTerm]);
@@ -47,8 +45,6 @@ const App = () => {
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
-
- 
 
   //filter the stories staying only term which is met
   const searchedStories = stories.filter((story) =>
@@ -66,19 +62,33 @@ const App = () => {
 };
 
 //search component
-const Search = ({ search, onSearch }) => {
-  return (
-    <div>
-      <label htmlFor="search">Search: </label>
+/*
+//to have multiple top level elements by array
+const Search = ({ search, onSearch }) => [
+  
+    
+      <label Key="1" htmlFor="search">Search: </label>,
 
-      {/* //controlled component */}
-      <input id="search" type="text" value={search} onChange={onSearch} />
+      <input key="2" id="search" type="text" value={search} onChange={onSearch} />,
       <p>
         Searching for <strong>{search}</strong>.
       </p>
-    </div>
-  );
-};
+    
+  ];
+*/
+//to have multiple top level elements by react Fragment
+const Search = ({ search, onSearch }) => (<>
+  
+    
+  <label htmlFor="search">Search: </label>
+
+  <input id="search" type="text" value={search} onChange={onSearch} />
+  <p>
+    Searching for <strong>{search}</strong>
+  </p>
+
+</>
+);
 
 const List = ({ list }) => {
   return list.map((item) => <Item key={item.objectID} item={item} />);
@@ -146,4 +156,5 @@ export default App;
   498  git push -u origin master
   499  git status
 */
- // 67
+
+// 67
