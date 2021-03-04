@@ -54,41 +54,39 @@ const App = () => {
   return (
     <div>
       <h1>Rajendra Stories! </h1>
-      <Search search={searchTerm} onSearch={handleSearch} />
+
+      {/* Earlier without Resuable Component
+       <Search search={searchTerm} onSearch={handleSearch} /> */}
+      {/* Resuable component */}
+      <InputWithLabel
+        id="search"
+        label="Search"
+        value={searchTerm}
+        onInputChange={handleSearch}
+      />
       <hr />
       <List list={searchedStories} />
     </div>
   );
 };
 
-//search component
-/*
-//to have multiple top level elements by array
-const Search = ({ search, onSearch }) => [
-  
-    
-      <label Key="1" htmlFor="search">Search: </label>,
-
-      <input key="2" id="search" type="text" value={search} onChange={onSearch} />,
-      <p>
-        Searching for <strong>{search}</strong>.
-      </p>
-    
-  ];
-*/
-//to have multiple top level elements by react Fragment
-const Search = ({ search, onSearch }) => (<>
-  
-    
-  <label htmlFor="search">Search: </label>
-
-  <input id="search" type="text" value={search} onChange={onSearch} />
-  <p>
-    Searching for <strong>{search}</strong>
-  </p>
-
-</>
+//Reuseable component (from search but now can be resused for new component)
+const InputWithLabel = ({ id, label, value, type = "text", onInputChange }) => (
+  <>
+    <label htmlFor={id}>{label}</label>
+    &nbsp;
+    <input id={id} type={type} value={value} onChange={onInputChange} />
+  </>
 );
+
+//Ex search component
+// const Search = ({ search, onSearch }) => (
+//   <>
+//     <label htmlFor="search">Search: </label>
+
+//     <input id="search" type="text" value={search} onChange={onSearch} />
+//   </>
+// );
 
 const List = ({ list }) => {
   return list.map((item) => <Item key={item.objectID} item={item} />);
